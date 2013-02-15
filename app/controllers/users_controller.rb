@@ -7,6 +7,7 @@ class UsersController < ApplicationController
     if errCode < 0
       @jsonObj = { :errCode => errCode}
     else
+      user = User.where(:user=>inputUser)[0]
       @jsonObj = { :errCode => errCode, :count => user.count }
     end
     respond_to do |format|
@@ -21,10 +22,9 @@ class UsersController < ApplicationController
     if errCode < 0 
       @jsonObj = { :errCode => errCode }
     else
-      user = User.where(:user=>inputUser)
+      user = User.where(:user=>inputUser)[0]
       @jsonObj = { :errCode => errCode, :count => user.count }
     end
-    @user = User.where(:user=>inputUser)
     respond_to do |format|
       format.json { render :json => @jsonObj }
     end
@@ -32,9 +32,19 @@ class UsersController < ApplicationController
 
   def resetFixture
     errCode = User.resetFixture
-    @jsonObj = {:errCode => nil}
+    @jsonObj = {:errCode => errCode}
     respond_to do |format|
       format.json { render :json => @jsonObj }
+    end
+  end
+  
+  def unitTests
+    `rspec > unit.txt`
+    fileOutput = File.read("unit.txt")
+    test_match = fileOutput[/(.*)example/, 1]
+    fail_match = fileOutput[/,(.*)failure/, 1]
+    respond_to do |format|
+      format.json { render :json => { :totalTests => test_match.to_i, :nrFailed => fail_match.to_i, :output => 'Tests run successfully' }}
     end
   end 
       

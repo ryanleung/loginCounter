@@ -1,9 +1,10 @@
 LoginCounter::Application.routes.draw do
   #resources :users
-  match 'users/add' => 'users#add'
-  match 'users/login' => 'users#login'
+  match 'users/add' => 'users#add', :via => :post, :defaults => { :format => 'json' }
+  match 'users/login' => 'users#login', :via => :post, :defaults => { :format => 'json' }
+  match 'TESTAPI/resetFixture' => 'users#resetFixture', :via => :post, :defaults => { :format => 'json' }
+  match 'TESTAPI/unitTests' => 'users#unitTests', :via => :post, :defaults => { :format => 'json' }
 
-  match 'TESTAPI/resetFixture' => 'users#resetFixture'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

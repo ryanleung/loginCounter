@@ -13,18 +13,18 @@ class User < ActiveRecord::Base
 
   def self.login(inputUser,inputPassword)
     inputtedPassword = inputPassword
-    if not User.exists?(inputUser)
+    if not User.exists?(:user => inputUser)
       #ERR_BAD_CREDENTIALS -1
       return -1
     end
-    user = User.where(:user => inputUser)
+    user = User.where(:user => inputUser)[0]
     if user.password != inputPassword
       #ERR_BAD_CREDENTIALS
       return -1
     end
     user.count += 1
     user.save
-    return user.count
+    return 1
   end
 
   def self.add(inputUser,inputPassword)
